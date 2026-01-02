@@ -220,6 +220,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Inspired by classic Solari split-flap displays
 - Uses JetBrains Mono font for technical appearance
 - Sound effect timing inspired by real mechanical displays
+- Built with assistance from [Claude Code](https://claude.ai/code) by Anthropic
 
 ---
 
