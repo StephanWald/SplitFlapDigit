@@ -4,6 +4,8 @@ A realistic HTML5 web component that recreates the classic split-flap display (a
 
 ![Split Flap Display Demo](screenshot.png)
 
+![Digital Clock Example](screenshot_clock.png)
+
 ## Features
 
 - 🎯 **Authentic Animation**: Realistic flip animation with 3D perspective that mimics real split-flap displays
