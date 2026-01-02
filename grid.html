@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Flap Grid Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ff6b35;
+        }
+        
+        .display-grid {
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            gap: 4px;
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            justify-items: center;
+        }
+        
+        .input-section {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .input-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .row-label {
+            font-weight: bold;
+            color: #ff6b35;
+            min-width: 60px;
+        }
+        
+        .row-input {
+            flex: 1;
+            background: #444;
+            color: #fff;
+            border: 1px solid #666;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 16px;
+            max-length: 20;
+        }
+        
+        .row-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #e55a2b;
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .info {
+            background: #444;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6b35;
+        }
+        
+        .alphabet-display {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 14px;
+            color: #ccc;
+            text-align: center;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Split Flap Grid Display (20×6)</h1>
+        
+        <div class="display-grid" id="displayGrid">
+            <!-- Grid will be populated by JavaScript -->
+        </div>
+        
+        <div class="input-section">
+            <h3>Enter Text for Each Row (20 characters max)</h3>
+            <div class="input-row">
+                <span class="row-label">Row 1:</span>
+                <input type="text" class="row-input" id="row1" maxlength="20" placeholder="Enter text for row 1...">
+            </div>
+            <div class="input-row">
+                <span class="row-label">Row 2:</span>
+                <input type="text" class="row-input" id="row2" maxlength="20" placeholder="Enter text for row 2...">
+            </div>
+            <div class="input-row">
+                <span class="row-label">Row 3:</span>
+                <input type="text" class="row-input" id="row3" maxlength="20" placeholder="Enter text for row 3...">
+            </div>
+            <div class="input-row">
+                <span class="row-label">Row 4:</span>
+                <input type="text" class="row-input" id="row4" maxlength="20" placeholder="Enter text for row 4...">
+            </div>
+            <div class="input-row">
+                <span class="row-label">Row 5:</span>
+                <input type="text" class="row-input" id="row5" maxlength="20" placeholder="Enter text for row 5...">
+            </div>
+            <div class="input-row">
+                <span class="row-label">Row 6:</span>
+                <input type="text" class="row-input" id="row6" maxlength="20" placeholder="Enter text for row 6...">
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="updateDisplay()">Update Display</button>
+            <button onclick="clearDisplay()">Clear All</button>
+            <button onclick="demoText()">Demo Text</button>
+            <button onclick="randomText()">Random Text</button>
+        </div>
+        
+        <div class="info">
+            <strong>Supported Characters:</strong>
+            <div class="alphabet-display" id="alphabetDisplay">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <p><strong>Instructions:</strong> Enter up to 20 characters per row. The display supports letters, numbers, and common symbols. Empty positions will show spaces.</p>
+        </div>
+    </div>
+
+    <script src="split-flap-digit.js"></script>
+    <script>
+        // Extended alphabet with special characters
+        const FULL_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?@#$%&*+-=<>()[]{}/:;"\' ';
+        
+        // Initialize the grid
+        function initializeGrid() {
+            const grid = document.getElementById('displayGrid');
+            
+            // Create 6 rows × 20 columns = 120 segments
+            for (let row = 0; row < 6; row++) {
+                for (let col = 0; col < 20; col++) {
+                    const segment = document.createElement('split-flap-digit');
+                    segment.setAttribute('value', ' ');
+                    segment.setAttribute('alphabet', FULL_ALPHABET);
+                    segment.id = `segment-${row}-${col}`;
+                    grid.appendChild(segment);
+                }
+            }
+            
+            // Display the alphabet
+            document.getElementById('alphabetDisplay').textContent = FULL_ALPHABET;
+        }
+        
+        function updateDisplay() {
+            for (let row = 0; row < 6; row++) {
+                const input = document.getElementById(`row${row + 1}`);
+                const text = input.value.toUpperCase().padEnd(20, ' ');
+                
+                for (let col = 0; col < 20; col++) {
+                    const segment = document.getElementById(`segment-${row}-${col}`);
+                    const char = text[col] || ' ';
+                    
+                    // Add a small delay for each column to create a wave effect
+                    setTimeout(() => {
+                        segment.setAttribute('value', char);
+                    }, col * 50);
+                }
+            }
+        }
+        
+        function clearDisplay() {
+            // Clear all inputs
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`row${i}`).value = '';
+            }
+            
+            // Clear all segments
+            for (let row = 0; row < 6; row++) {
+                for (let col = 0; col < 20; col++) {
+                    const segment = document.getElementById(`segment-${row}-${col}`);
+                    setTimeout(() => {
+                        segment.setAttribute('value', ' ');
+                    }, (row * 20 + col) * 10);
+                }
+            }
+        }
+        
+        function demoText() {
+            const demoTexts = [
+                'SPLIT FLAP DISPLAY',
+                'HELLO WORLD!',
+                'FLIGHT 447 GATE B12',
+                'DEPARTURE 14:30',
+                'NEXT TRAIN IN 5 MIN',
+                'WELCOME ABOARD!'
+            ];
+            
+            for (let i = 0; i < 6; i++) {
+                document.getElementById(`row${i + 1}`).value = demoTexts[i];
+            }
+            
+            updateDisplay();
+        }
+        
+        function randomText() {
+            const words = [
+                'HELLO', 'WORLD', 'FLIGHT', 'GATE', 'TIME', 'TRAIN', 'BUS', 'TAXI',
+                'WELCOME', 'ABOARD', 'STATION', 'PLATFORM', 'TRACK', 'DELAY',
+                'DEPARTURE', 'ARRIVAL', 'BOARDING', 'FINAL', 'CALL', 'NEXT'
+            ];
+            
+            for (let row = 1; row <= 6; row++) {
+                let text = '';
+                while (text.length < 18) {
+                    const word = words[Math.floor(Math.random() * words.length)];
+                    if (text.length + word.length + 1 <= 20) {
+                        text += (text ? ' ' : '') + word;
+                    } else {
+                        break;
+                    }
+                }
+                document.getElementById(`row${row}`).value = text;
+            }
+            
+            updateDisplay();
+        }
+        
+        // Add enter key support for inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGrid();
+            
+            // Add enter key listener to all inputs
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`row${i}`).addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        updateDisplay();
+                    }
+                });
+            }
+            
+            // Load demo text on start
+            setTimeout(() => {
+                demoText();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

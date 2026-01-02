@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Flap Display Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #2c2c2c;
+            color: #fff;
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+        }
+        
+        .demo-section {
+            margin-bottom: 40px;
+            background: #333;
+            padding: 30px;
+            border-radius: 8px;
+        }
+        
+        .demo-section h2 {
+            margin-top: 0;
+            color: #ff6b35;
+        }
+        
+        .display-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .controls {
+            margin: 20px 0;
+        }
+        
+        button {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #e55a2b;
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        input[type="text"] {
+            background: #444;
+            color: #fff;
+            border: 1px solid #666;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            margin: 5px;
+        }
+        
+        .clock-display {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            gap: 5px;
+            align-items: center;
+            border: 2px solid #444;
+        }
+        
+        .separator {
+            color: #ff6b35;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .info {
+            background: #444;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6b35;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Split Flap Display Component Demo</h1>
+        
+        <div class="demo-section">
+            <h2>Interactive Single Digit</h2>
+            <div class="display-container">
+                <split-flap-digit id="singleDigit" value="0"></split-flap-digit>
+            </div>
+            <div class="controls">
+                <button onclick="cycleSingleDigit()">Cycle 0-9</button>
+                <button onclick="randomSingleDigit()">Random Digit</button>
+                <button onclick="showLetters()">Show Letters</button>
+                <input type="text" id="customValue" placeholder="Enter digit/letter" maxlength="1">
+                <button onclick="setCustomValue()">Set Value</button>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Digital Clock</h2>
+            <div class="clock-display">
+                <split-flap-digit id="hour1" value="1" alphabet="0123456789"></split-flap-digit>
+                <split-flap-digit id="hour2" value="2" alphabet="0123456789"></split-flap-digit>
+                <span class="separator">:</span>
+                <split-flap-digit id="min1" value="3" alphabet="0123456789"></split-flap-digit>
+                <split-flap-digit id="min2" value="4" alphabet="0123456789"></split-flap-digit>
+                <span class="separator">:</span>
+                <split-flap-digit id="sec1" value="5" alphabet="0123456789"></split-flap-digit>
+                <split-flap-digit id="sec2" value="6" alphabet="0123456789"></split-flap-digit>
+            </div>
+            <div class="controls">
+                <button onclick="startClock()">Start Clock</button>
+                <button onclick="stopClock()">Stop Clock</button>
+                <button onclick="randomTime()">Random Time</button>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Counter Demo</h2>
+            <div class="display-container">
+                <split-flap-digit id="counter1" value="0" alphabet="0123456789"></split-flap-digit>
+                <split-flap-digit id="counter2" value="0" alphabet="0123456789"></split-flap-digit>
+                <split-flap-digit id="counter3" value="0" alphabet="0123456789"></split-flap-digit>
+            </div>
+            <div class="controls">
+                <button onclick="incrementCounter()">+1</button>
+                <button onclick="decrementCounter()">-1</button>
+                <button onclick="resetCounter()">Reset</button>
+                <button onclick="fastCount()">Fast Count</button>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>Alphabet Demo</h2>
+            <div class="demo-grid">
+                <split-flap-digit id="letter1" value="A" alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"></split-flap-digit>
+                <split-flap-digit id="letter2" value="B" alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"></split-flap-digit>
+                <split-flap-digit id="letter3" value="C" alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"></split-flap-digit>
+                <split-flap-digit id="letter4" value="D" alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"></split-flap-digit>
+                <split-flap-digit id="letter5" value="E" alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"></split-flap-digit>
+                <split-flap-digit id="letter6" value="F" alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"></split-flap-digit>
+            </div>
+            <div class="controls">
+                <button onclick="cycleAlphabet()">Cycle Alphabet</button>
+                <button onclick="randomLetters()">Random Letters</button>
+                <button onclick="spellWord()">Spell "HELLO"</button>
+            </div>
+        </div>
+        
+        <div class="info">
+            <strong>Features:</strong>
+            <ul>
+                <li>Technical monospace font (JetBrains Mono)</li>
+                <li>Realistic flip animation with 3D perspective</li>
+                <li>Sound effect on each flip</li>
+                <li>Configurable alphabet via `alphabet` attribute (defaults to digits + letters)</li>
+                <li>Sequential animation through character sets</li>
+                <li>Black segmented display with white center divider</li>
+                <li>Configurable via HTML attributes</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="split-flap-digit.js"></script>
+    <script>
+        let currentCounter = 0;
+        let clockInterval = null;
+        let singleDigitIndex = 0;
+        let letterIndex = 0;
+        
+        const digits = '0123456789';
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        
+        function cycleSingleDigit() {
+            const digit = digits[singleDigitIndex % digits.length];
+            document.getElementById('singleDigit').setAttribute('value', digit);
+            singleDigitIndex++;
+        }
+        
+        function randomSingleDigit() {
+            const digit = digits[Math.floor(Math.random() * digits.length)];
+            document.getElementById('singleDigit').setAttribute('value', digit);
+        }
+        
+        function showLetters() {
+            const letter = letters[letterIndex % letters.length];
+            document.getElementById('singleDigit').setAttribute('value', letter);
+            letterIndex++;
+        }
+        
+        function setCustomValue() {
+            const input = document.getElementById('customValue');
+            const value = input.value.toUpperCase();
+            if (value.length > 0) {
+                document.getElementById('singleDigit').setAttribute('value', value);
+                input.value = '';
+            }
+        }
+        
+        function startClock() {
+            stopClock();
+            updateClock();
+            clockInterval = setInterval(updateClock, 1000);
+        }
+        
+        function stopClock() {
+            if (clockInterval) {
+                clearInterval(clockInterval);
+                clockInterval = null;
+            }
+        }
+        
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            document.getElementById('hour1').setAttribute('value', hours[0]);
+            document.getElementById('hour2').setAttribute('value', hours[1]);
+            document.getElementById('min1').setAttribute('value', minutes[0]);
+            document.getElementById('min2').setAttribute('value', minutes[1]);
+            document.getElementById('sec1').setAttribute('value', seconds[0]);
+            document.getElementById('sec2').setAttribute('value', seconds[1]);
+        }
+        
+        function randomTime() {
+            const hours = Math.floor(Math.random() * 24).toString().padStart(2, '0');
+            const minutes = Math.floor(Math.random() * 60).toString().padStart(2, '0');
+            const seconds = Math.floor(Math.random() * 60).toString().padStart(2, '0');
+            
+            document.getElementById('hour1').setAttribute('value', hours[0]);
+            document.getElementById('hour2').setAttribute('value', hours[1]);
+            document.getElementById('min1').setAttribute('value', minutes[0]);
+            document.getElementById('min2').setAttribute('value', minutes[1]);
+            document.getElementById('sec1').setAttribute('value', seconds[0]);
+            document.getElementById('sec2').setAttribute('value', seconds[1]);
+        }
+        
+        function incrementCounter() {
+            currentCounter++;
+            updateCounter();
+        }
+        
+        function decrementCounter() {
+            currentCounter = Math.max(0, currentCounter - 1);
+            updateCounter();
+        }
+        
+        function resetCounter() {
+            currentCounter = 0;
+            updateCounter();
+        }
+        
+        function updateCounter() {
+            const counterStr = currentCounter.toString().padStart(3, '0');
+            document.getElementById('counter1').setAttribute('value', counterStr[0]);
+            document.getElementById('counter2').setAttribute('value', counterStr[1]);
+            document.getElementById('counter3').setAttribute('value', counterStr[2]);
+        }
+        
+        function fastCount() {
+            let count = 0;
+            const interval = setInterval(() => {
+                currentCounter = count;
+                updateCounter();
+                count++;
+                if (count > 100) {
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+        
+        function cycleAlphabet() {
+            const elements = ['letter1', 'letter2', 'letter3', 'letter4', 'letter5', 'letter6'];
+            elements.forEach((id, index) => {
+                setTimeout(() => {
+                    const letter = letters[(letterIndex + index) % letters.length];
+                    document.getElementById(id).setAttribute('value', letter);
+                }, index * 200);
+            });
+            letterIndex += 6;
+        }
+        
+        function randomLetters() {
+            const elements = ['letter1', 'letter2', 'letter3', 'letter4', 'letter5', 'letter6'];
+            elements.forEach((id, index) => {
+                setTimeout(() => {
+                    const letter = letters[Math.floor(Math.random() * letters.length)];
+                    document.getElementById(id).setAttribute('value', letter);
+                }, index * 100);
+            });
+        }
+        
+        function spellWord() {
+            const word = 'HELLO!';
+            const elements = ['letter1', 'letter2', 'letter3', 'letter4', 'letter5', 'letter6'];
+            elements.forEach((id, index) => {
+                setTimeout(() => {
+                    const char = word[index] || ' ';
+                    document.getElementById(id).setAttribute('value', char);
+                }, index * 300);
+            });
+        }
+        
+        document.getElementById('customValue').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                setCustomValue();
+            }
+        });
+    </script>
+</body>
+</html>

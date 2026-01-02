@@ -8,7 +8,7 @@ A realistic HTML5 web component that recreates the classic split-flap display (a
 
 - 🎯 **Authentic Animation**: Realistic flip animation with 3D perspective that mimics real split-flap displays
 - 🔤 **Configurable Alphabet**: Support for digits, letters, and special characters via the `alphabet` attribute
-- 🎵 **Sound Effects**: Authentic flip sound with randomized timing for parallel flips
+- 🎵 **Sound Effects**: Authentic embedded flip sound with randomized timing for parallel flips
 - ⚡ **Sequential Animation**: Proper step-by-step progression (e.g., 1→2→3→4→5) just like real displays
 - 🎨 **Technical Design**: Monospace font (JetBrains Mono) with proper character splitting
 - 🔧 **Web Standards**: Built as a standard HTML5 Custom Element - no dependencies
@@ -146,9 +146,9 @@ This repository includes two demonstration pages:
 - Extended character set including punctuation
 - Airport/station style messaging
 
-## Audio Requirements
+## Audio
 
-The component uses `light-switch-96716.mp3` for flip sounds. Make sure this file is available in the same directory as your HTML file.
+The component includes embedded flip sound effects (Base64 encoded audio). No external audio files are required - the component is completely self-contained.
 
 ## Browser Support
 
@@ -181,11 +181,12 @@ topFlap.style.animation = 'flip-top 0.12s ease-in-out forwards';  // Adjust dura
 
 ### Sound Customization
 
-Replace `light-switch-96716.mp3` with your own sound file, or modify the audio setup:
+Replace the embedded Base64 audio data with your own sound, or modify the audio setup:
 
 ```javascript
-// In setupAudio method
-this.audio = new Audio('your-custom-sound.mp3');
+// In setupAudio method - replace the audioData with your own Base64 encoded sound
+const audioData = 'data:audio/mpeg;base64,YOUR_BASE64_DATA_HERE';
+this.audio = new Audio(audioData);
 this.audio.volume = 0.5;  // Adjust volume
 ```
 
@@ -198,7 +199,7 @@ this.audio.volume = 0.5;  // Adjust volume
 - **Audio**: HTML5 Audio with randomized playback timing
 
 ### Performance
-- **Lightweight**: ~8KB minified JavaScript, no dependencies
+- **Lightweight**: ~21KB JavaScript with embedded audio, no external dependencies
 - **Efficient**: CSS transforms use GPU acceleration
 - **Memory**: Each instance uses minimal memory footprint
 
