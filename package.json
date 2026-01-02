@@ -1,0 +1,32 @@
+{
+  "name": "split-flap-display",
+  "version": "1.0.0",
+  "description": "A realistic HTML5 web component that recreates classic split-flap displays",
+  "main": "split-flap-digit.min.js",
+  "scripts": {
+    "build": "terser split-flap-digit.js -o split-flap-digit.min.js --compress --mangle --comments false",
+    "build:dev": "terser split-flap-digit.js -o split-flap-digit.min.js --compress --mangle --comments false --source-map",
+    "dev": "python3 -m http.server 8000",
+    "clean": "rm -f split-flap-digit.min.js split-flap-digit.min.js.map"
+  },
+  "keywords": [
+    "web-component",
+    "split-flap",
+    "display",
+    "solari",
+    "flip-dot",
+    "retro",
+    "animation",
+    "custom-element"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "terser": "^5.24.0"
+  },
+  "files": [
+    "split-flap-digit.min.js",
+    "split-flap-digit.js",
+    "README.md"
+  ]
+}

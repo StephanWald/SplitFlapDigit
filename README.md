@@ -18,6 +18,10 @@ A realistic HTML5 web component that recreates the classic split-flap display (a
 
 1. Include the component script:
 ```html
+<!-- For production (minified) -->
+<script src="split-flap-digit.min.js"></script>
+
+<!-- For development (unminified) -->
 <script src="split-flap-digit.js"></script>
 ```
 
@@ -199,17 +203,50 @@ this.audio.volume = 0.5;  // Adjust volume
 - **Audio**: HTML5 Audio with randomized playback timing
 
 ### Performance
-- **Lightweight**: ~21KB JavaScript with embedded audio, no external dependencies
+- **Lightweight**: ~17KB minified JavaScript with embedded audio, no external dependencies
 - **Efficient**: CSS transforms use GPU acceleration
 - **Memory**: Each instance uses minimal memory footprint
+
+## Development
+
+### Building
+
+To build the minified version:
+
+```bash
+# Install dependencies
+npm install
+
+# Build minified version
+npm run build
+
+# Or use the build script
+./build.sh
+```
+
+This creates `split-flap-digit.min.js` with:
+- Compressed and minified code
+- Removed comments and whitespace
+- ~10% size reduction
+
+### Available Scripts
+
+```bash
+npm run build      # Build minified version
+npm run build:dev  # Build with source maps
+npm run dev        # Start development server
+npm run clean      # Clean build files
+```
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Make your changes to `split-flap-digit.js`
+4. Run `npm run build` to create the minified version
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 ## License
 
