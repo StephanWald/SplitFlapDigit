@@ -1,5 +1,7 @@
 # Split Flap Display Web Component
 
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/split-flap-display)
+
 A realistic HTML5 web component that recreates the classic split-flap display (also known as flip-dot or Solari board displays) commonly seen in airports, train stations, and retro displays.
 
 ![Split Flap Display Demo](screenshot.png)
