@@ -19,6 +19,21 @@ A realistic HTML5 web component that recreates the classic split-flap display (a
 ## Quick Start
 
 1. Include the component script:
+
+**Option A: CDN (easiest)**
+```html
+<script src="https://cdn.jsdelivr.net/npm/split-flap-display@1.0.0/split-flap-digit.min.js"></script>
+```
+
+**Option B: NPM**
+```bash
+npm install split-flap-display
+```
+```html
+<script src="node_modules/split-flap-display/split-flap-digit.min.js"></script>
+```
+
+**Option C: Local files**
 ```html
 <!-- For production (minified) -->
 <script src="split-flap-digit.min.js"></script>
