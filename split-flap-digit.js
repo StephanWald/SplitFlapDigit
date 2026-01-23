@@ -10,7 +10,7 @@ class SplitFlapDigit extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['value', 'alphabet'];
+    return ['value', 'alphabet', 'speed'];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -20,10 +20,33 @@ class SplitFlapDigit extends HTMLElement {
     if (name === 'alphabet' && oldValue !== newValue) {
       // Alphabet changed, no immediate action needed
     }
+    if (name === 'speed' && oldValue !== newValue) {
+      // Speed changed, will be used in next animation cycle
+    }
   }
 
   getAlphabet() {
     return this.getAttribute('alphabet') || '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  }
+
+  getSpeed() {
+    const speed = this.getAttribute('speed') || 'normal';
+
+    // Support preset speeds
+    const presets = {
+      'slow': 200,
+      'normal': 100,
+      'fast': 50
+    };
+
+    // If it's a preset, return the preset value
+    if (presets[speed]) {
+      return presets[speed];
+    }
+
+    // Otherwise, try to parse as a number (custom milliseconds)
+    const customSpeed = parseInt(speed, 10);
+    return isNaN(customSpeed) ? presets['normal'] : customSpeed;
   }
 
   setupAudio() {
@@ -64,18 +87,22 @@ class SplitFlapDigit extends HTMLElement {
   animateSequential(targetValue) {
     const sequence = this.getSequence(this.currentValue, targetValue);
     let index = 0;
-    
+
+    // Get dynamic timing based on speed attribute
+    const speed = this.getSpeed();
+    const sequentialDelay = speed * 0.15;  // 15% of speed for delay between flips
+
     const nextFlip = () => {
       if (index < sequence.length) {
         const nextValue = sequence[index];
         this.animateFlip(this.currentValue, nextValue, () => {
           this.currentValue = nextValue;
           index++;
-          setTimeout(nextFlip, 15);
+          setTimeout(nextFlip, sequentialDelay);
         });
       }
     };
-    
+
     nextFlip();
   }
 
@@ -99,33 +126,39 @@ class SplitFlapDigit extends HTMLElement {
 
   animateFlip(oldValue, newValue, callback) {
     this.isAnimating = true;
-    
+
     const topFlap = this.shadowRoot.querySelector('.top-flap');
     const bottomFlap = this.shadowRoot.querySelector('.bottom-flap');
     const newTopFlap = this.shadowRoot.querySelector('.new-top-flap');
     const newBottomFlap = this.shadowRoot.querySelector('.new-bottom-flap');
-    
+
+    // Get dynamic timing based on speed attribute
+    const speed = this.getSpeed();
+    const topAnimDuration = speed * 0.2;  // 20% of speed for top flip
+    const bottomAnimDuration = speed * 0.6;  // 60% of speed for bottom flip
+    const waitTime = speed * 0.6;  // 60% of speed for transitions
+
     // Set up the new top flap - stationary behind the dropping flap
     newTopFlap.setAttribute('data-value', newValue);
     newTopFlap.style.display = 'flex';
     newTopFlap.style.transform = 'rotateX(0deg)';
     newTopFlap.style.zIndex = '1';
-    
+
     // Set up the new bottom flap (hidden initially, will slide in)
     newBottomFlap.setAttribute('data-value', newValue);
     newBottomFlap.style.display = 'flex';
     newBottomFlap.style.transform = 'rotateX(90deg)';
     newBottomFlap.style.zIndex = '5';
-    
+
     this.playFlipSound();
-    
+
     // Start the top flap animation - new top flap stays stationary behind
-    topFlap.style.animation = 'flip-top 0.02s ease-in-out forwards';
-    
+    topFlap.style.animation = `flip-top ${topAnimDuration / 1000}s ease-in-out forwards`;
+
     setTimeout(() => {
       // Reveal the new bottom half
-      newBottomFlap.style.animation = 'flip-bottom 0.06s ease-out forwards';
-      
+      newBottomFlap.style.animation = `flip-bottom ${bottomAnimDuration / 1000}s ease-out forwards`;
+
       setTimeout(() => {
         // Clean up and set final state
         topFlap.setAttribute('data-value', newValue);
@@ -140,10 +173,10 @@ class SplitFlapDigit extends HTMLElement {
         newTopFlap.style.zIndex = '';
         newBottomFlap.style.display = 'none';
         this.isAnimating = false;
-        
+
         if (callback) callback();
-      }, 60);
-    }, 60);
+      }, waitTime);
+    }, waitTime);
   }
 
   render() {
