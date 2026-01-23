@@ -10,7 +10,7 @@ class SplitFlapDigit extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['value', 'alphabet'];
+    return ['value', 'alphabet', 'speed'];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
