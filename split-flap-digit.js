@@ -214,11 +214,11 @@ class SplitFlapDigit extends HTMLElement {
     // Start the top flap animation - new top flap stays stationary behind
     topFlap.style.animation = `flip-top ${topAnimDuration / 1000}s ease-in-out forwards`;
 
-    setTimeout(() => {
+    this.rafTimeout(() => {
       // Reveal the new bottom half
       newBottomFlap.style.animation = `flip-bottom ${bottomAnimDuration / 1000}s ease-out forwards`;
 
-      setTimeout(() => {
+      this.rafTimeout(() => {
         // Clean up and set final state
         topFlap.setAttribute('data-value', newValue);
         bottomFlap.setAttribute('data-value', newValue);
