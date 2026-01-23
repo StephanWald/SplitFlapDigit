@@ -95,7 +95,33 @@
             font-weight: bold;
             margin: 0 10px;
         }
-        
+
+        .clock-status {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #666;
+            margin-left: 15px;
+            transition: background 0.3s;
+        }
+
+        .clock-status.running {
+            background: #4CAF50;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
         .demo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
