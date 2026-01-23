@@ -87,18 +87,22 @@ class SplitFlapDigit extends HTMLElement {
   animateSequential(targetValue) {
     const sequence = this.getSequence(this.currentValue, targetValue);
     let index = 0;
-    
+
+    // Get dynamic timing based on speed attribute
+    const speed = this.getSpeed();
+    const sequentialDelay = speed * 0.15;  // 15% of speed for delay between flips
+
     const nextFlip = () => {
       if (index < sequence.length) {
         const nextValue = sequence[index];
         this.animateFlip(this.currentValue, nextValue, () => {
           this.currentValue = nextValue;
           index++;
-          setTimeout(nextFlip, 15);
+          setTimeout(nextFlip, sequentialDelay);
         });
       }
     };
-    
+
     nextFlip();
   }
 
