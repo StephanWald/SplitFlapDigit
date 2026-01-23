@@ -272,6 +272,8 @@
                 clearInterval(clockInterval);
                 clockInterval = null;
             }
+            document.getElementById('clockStatus').classList.remove('running');
+            document.getElementById('clockStatusText').textContent = 'Stopped';
         }
         
         function updateClock() {
