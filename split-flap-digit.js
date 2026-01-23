@@ -49,6 +49,15 @@ class SplitFlapDigit extends HTMLElement {
     return isNaN(customSpeed) ? presets['normal'] : customSpeed;
   }
 
+  prefersReducedMotion() {
+    // Check if the user has enabled reduced motion preferences
+    // Returns true if prefers-reduced-motion: reduce is set
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    return false;
+  }
+
   setupAudio() {
     try {
       // Base64 encoded light-switch sound
