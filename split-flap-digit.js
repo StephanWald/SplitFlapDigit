@@ -5,6 +5,7 @@ class SplitFlapDigit extends HTMLElement {
     this.currentValue = '0';
     this.isAnimating = false;
     this.flipSound = null;
+    this.activeRafIds = [];
     this.setupAudio();
     this.render();
   }
@@ -82,6 +83,59 @@ class SplitFlapDigit extends HTMLElement {
     return Math.max(0, Math.min(1, parsedVolume));
   }
 
+  rafTimeout(callback, delay) {
+    // requestAnimationFrame wrapper for timed delays
+    // Syncs with browser repaint cycle for smoother animations
+    const start = performance.now();
+    let rafId;
+
+    const check = (timestamp) => {
+      if (timestamp - start >= delay) {
+        // Remove from active IDs before calling callback
+        this.removeRafId(rafId);
+        callback();
+      } else {
+        rafId = requestAnimationFrame(check);
+        // Store the new ID (replaces previous one in check chain)
+        this.storeRafId(rafId);
+      }
+    };
+
+    rafId = requestAnimationFrame(check);
+    // Store initial RAF ID
+    this.storeRafId(rafId);
+
+    // Return cancellable ID for cleanup
+    return rafId;
+  }
+
+  storeRafId(rafId) {
+    if (!this.activeRafIds.includes(rafId)) {
+      this.activeRafIds.push(rafId);
+    }
+  }
+
+  removeRafId(rafId) {
+    const index = this.activeRafIds.indexOf(rafId);
+    if (index > -1) {
+      this.activeRafIds.splice(index, 1);
+    }
+  }
+
+  cancelAnimations() {
+    // Cancel all pending requestAnimationFrame calls
+    this.activeRafIds.forEach(rafId => {
+      cancelAnimationFrame(rafId);
+    });
+    this.activeRafIds = [];
+    this.isAnimating = false;
+  }
+
+  disconnectedCallback() {
+    // Clean up animations when component is removed from DOM
+    this.cancelAnimations();
+  }
+
   setupAudio() {
     try {
       // Base64 encoded light-switch sound
@@ -124,6 +178,9 @@ class SplitFlapDigit extends HTMLElement {
   }
 
   animateSequential(targetValue) {
+    // Cancel any existing animations before starting new one
+    this.cancelAnimations();
+
     const sequence = this.getSequence(this.currentValue, targetValue);
     let index = 0;
 
@@ -137,7 +194,7 @@ class SplitFlapDigit extends HTMLElement {
         this.animateFlip(this.currentValue, nextValue, () => {
           this.currentValue = nextValue;
           index++;
-          setTimeout(nextFlip, sequentialDelay);
+          this.rafTimeout(nextFlip, sequentialDelay);
         });
       }
     };
@@ -194,11 +251,11 @@ class SplitFlapDigit extends HTMLElement {
     // Start the top flap animation - new top flap stays stationary behind
     topFlap.style.animation = `flip-top ${topAnimDuration / 1000}s ease-in-out forwards`;
 
-    setTimeout(() => {
+    this.rafTimeout(() => {
       // Reveal the new bottom half
       newBottomFlap.style.animation = `flip-bottom ${bottomAnimDuration / 1000}s ease-out forwards`;
 
-      setTimeout(() => {
+      this.rafTimeout(() => {
         // Clean up and set final state
         topFlap.setAttribute('data-value', newValue);
         bottomFlap.setAttribute('data-value', newValue);
