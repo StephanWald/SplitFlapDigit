@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Attribute Test - Split Flap Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #2c2c2c;
+            color: #fff;
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+        }
+
+        .test-section {
+            margin-bottom: 40px;
+            background: #333;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .test-section h2 {
+            margin-top: 0;
+            color: #ff6b35;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 10px;
+        }
+
+        .display-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 8px;
+        }
+
+        .digit-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .digit-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .controls {
+            margin: 20px 0;
+        }
+
+        button {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #e55a2b;
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .info {
+            background: #444;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .timing-info {
+            background: #2a5a2a;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Speed Attribute Testing</h1>
+
+        <div class="info">
+            <strong>Test Objective:</strong>
+            <p>Verify that the speed attribute controls animation timing with preset and custom values.</p>
+            <strong>Expected Speed Values:</strong>
+            <ul>
+                <li><code>speed="fast"</code> → 50ms total animation time</li>
+                <li><code>speed="normal"</code> → 100ms total animation time (default)</li>
+                <li><code>speed="slow"</code> → 200ms total animation time</li>
+                <li>No speed attribute → defaults to 100ms (normal)</li>
+                <li>Custom numeric values → specified milliseconds</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 1: Preset Speed Values</h2>
+            <div class="display-container">
+                <div class="digit-wrapper">
+                    <div class="digit-label">FAST (50ms)</div>
+                    <split-flap-digit id="fast-digit" value="0" speed="fast"></split-flap-digit>
+                </div>
+                <div class="digit-wrapper">
+                    <div class="digit-label">NORMAL (100ms)</div>
+                    <split-flap-digit id="normal-digit" value="0" speed="normal"></split-flap-digit>
+                </div>
+                <div class="digit-wrapper">
+                    <div class="digit-label">SLOW (200ms)</div>
+                    <split-flap-digit id="slow-digit" value="0" speed="slow"></split-flap-digit>
+                </div>
+                <div class="digit-wrapper">
+                    <div class="digit-label">DEFAULT (no speed)</div>
+                    <split-flap-digit id="default-digit" value="0"></split-flap-digit>
+                </div>
+            </div>
+            <div class="controls">
+                <button onclick="testPresets()">Test All Presets (0→9)</button>
+                <button onclick="resetPresets()">Reset to 0</button>
+            </div>
+            <div class="timing-info">
+                <strong>✓ Manual Verification:</strong>
+                <ul>
+                    <li>Click "Test All Presets" and observe the animation speeds</li>
+                    <li>FAST should complete noticeably quicker than NORMAL</li>
+                    <li>SLOW should take twice as long as NORMAL</li>
+                    <li>DEFAULT (no speed attribute) should match NORMAL timing</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 2: Custom Millisecond Values</h2>
+            <div class="display-container">
+                <div class="digit-wrapper">
+                    <div class="digit-label">VERY FAST (15ms)</div>
+                    <split-flap-digit id="custom-15" value="0" speed="15"></split-flap-digit>
+                </div>
+                <div class="digit-wrapper">
+                    <div class="digit-label">CUSTOM (90ms)</div>
+                    <split-flap-digit id="custom-90" value="0" speed="90"></split-flap-digit>
+                </div>
+                <div class="digit-wrapper">
+                    <div class="digit-label">VERY SLOW (300ms)</div>
+                    <split-flap-digit id="custom-300" value="0" speed="300"></split-flap-digit>
+                </div>
+            </div>
+            <div class="controls">
+                <button onclick="testCustom()">Test Custom Speeds (0→9)</button>
+                <button onclick="resetCustom()">Reset to 0</button>
+            </div>
+            <div class="timing-info">
+                <strong>✓ Manual Verification:</strong>
+                <ul>
+                    <li>Click "Test Custom Speeds" and observe different timing</li>
+                    <li>15ms should be extremely fast</li>
+                    <li>90ms should be slightly faster than normal</li>
+                    <li>300ms should be very slow and easy to see each step</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 3: Side-by-Side Comparison</h2>
+            <div class="display-container">
+                <div class="digit-wrapper">
+                    <div class="digit-label">FAST</div>
+                    <split-flap-digit id="compare-fast" value="0" speed="fast"></split-flap-digit>
+                </div>
+                <div class="digit-wrapper">
+                    <div class="digit-label">NORMAL</div>
+                    <split-flap-digit id="compare-normal" value="0" speed="normal"></split-flap-digit>
+                </div>
+                <div class="digit-wrapper">
+                    <div class="digit-label">SLOW</div>
+                    <split-flap-digit id="compare-slow" value="0" speed="slow"></split-flap-digit>
+                </div>
+            </div>
+            <div class="controls">
+                <button onclick="compareAll()">Animate All Simultaneously</button>
+                <button onclick="resetComparison()">Reset</button>
+            </div>
+            <div class="timing-info">
+                <strong>✓ Manual Verification:</strong>
+                <ul>
+                    <li>All three should start at the same time</li>
+                    <li>FAST should finish first, then NORMAL, then SLOW</li>
+                    <li>The speed difference should be clearly visible</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 4: Dynamic Speed Change</h2>
+            <div class="display-container">
+                <div class="digit-wrapper">
+                    <div class="digit-label" id="dynamic-label">NORMAL (100ms)</div>
+                    <split-flap-digit id="dynamic-digit" value="0" speed="normal"></split-flap-digit>
+                </div>
+            </div>
+            <div class="controls">
+                <button onclick="setSpeed('fast')">Set Fast</button>
+                <button onclick="setSpeed('normal')">Set Normal</button>
+                <button onclick="setSpeed('slow')">Set Slow</button>
+                <button onclick="animateDynamic()">Animate (0→5)</button>
+            </div>
+            <div class="timing-info">
+                <strong>✓ Manual Verification:</strong>
+                <ul>
+                    <li>Change the speed attribute, then click Animate</li>
+                    <li>The animation should use the new speed setting</li>
+                    <li>Speed changes should take effect on the next animation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="split-flap-digit.js"></script>
+    <script>
+        // Test 1: Preset values
+        function testPresets() {
+            ['fast-digit', 'normal-digit', 'slow-digit', 'default-digit'].forEach(id => {
+                document.getElementById(id).setAttribute('value', '9');
+            });
+        }
+
+        function resetPresets() {
+            ['fast-digit', 'normal-digit', 'slow-digit', 'default-digit'].forEach(id => {
+                document.getElementById(id).setAttribute('value', '0');
+            });
+        }
+
+        // Test 2: Custom values
+        function testCustom() {
+            ['custom-15', 'custom-90', 'custom-300'].forEach(id => {
+                document.getElementById(id).setAttribute('value', '9');
+            });
+        }
+
+        function resetCustom() {
+            ['custom-15', 'custom-90', 'custom-300'].forEach(id => {
+                document.getElementById(id).setAttribute('value', '0');
+            });
+        }
+
+        // Test 3: Comparison
+        function compareAll() {
+            ['compare-fast', 'compare-normal', 'compare-slow'].forEach(id => {
+                document.getElementById(id).setAttribute('value', '9');
+            });
+        }
+
+        function resetComparison() {
+            ['compare-fast', 'compare-normal', 'compare-slow'].forEach(id => {
+                document.getElementById(id).setAttribute('value', '0');
+            });
+        }
+
+        // Test 4: Dynamic speed change
+        let currentSpeed = 'normal';
+
+        function setSpeed(speed) {
+            currentSpeed = speed;
+            const digit = document.getElementById('dynamic-digit');
+            digit.setAttribute('speed', speed);
+
+            const labels = {
+                'fast': 'FAST (50ms)',
+                'normal': 'NORMAL (100ms)',
+                'slow': 'SLOW (200ms)'
+            };
+            document.getElementById('dynamic-label').textContent = labels[speed];
+        }
+
+        function animateDynamic() {
+            document.getElementById('dynamic-digit').setAttribute('value', '5');
+            setTimeout(() => {
+                document.getElementById('dynamic-digit').setAttribute('value', '0');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
