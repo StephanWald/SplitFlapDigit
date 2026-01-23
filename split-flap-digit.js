@@ -141,6 +141,16 @@ class SplitFlapDigit extends HTMLElement {
     const newTopFlap = this.shadowRoot.querySelector('.new-top-flap');
     const newBottomFlap = this.shadowRoot.querySelector('.new-bottom-flap');
 
+    // Skip animation when reduced motion is preferred
+    if (this.prefersReducedMotion()) {
+      // Instantly update to the new value without animation
+      topFlap.setAttribute('data-value', newValue);
+      bottomFlap.setAttribute('data-value', newValue);
+      this.isAnimating = false;
+      if (callback) callback();
+      return;
+    }
+
     // Get dynamic timing based on speed attribute
     const speed = this.getSpeed();
     const topAnimDuration = speed * 0.2;  // 20% of speed for top flip
