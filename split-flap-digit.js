@@ -26,6 +26,26 @@ class SplitFlapDigit extends HTMLElement {
     return this.getAttribute('alphabet') || '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   }
 
+  getSpeed() {
+    const speed = this.getAttribute('speed') || 'normal';
+
+    // Support preset speeds
+    const presets = {
+      'slow': 200,
+      'normal': 100,
+      'fast': 50
+    };
+
+    // If it's a preset, return the preset value
+    if (presets[speed]) {
+      return presets[speed];
+    }
+
+    // Otherwise, try to parse as a number (custom milliseconds)
+    const customSpeed = parseInt(speed, 10);
+    return isNaN(customSpeed) ? presets['normal'] : customSpeed;
+  }
+
   setupAudio() {
     try {
       // Base64 encoded light-switch sound
