@@ -157,7 +157,7 @@ class SplitFlapDigit extends HTMLElement {
         this.animateFlip(this.currentValue, nextValue, () => {
           this.currentValue = nextValue;
           index++;
-          setTimeout(nextFlip, sequentialDelay);
+          this.rafTimeout(nextFlip, sequentialDelay);
         });
       }
     };
