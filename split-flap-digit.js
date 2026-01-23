@@ -49,6 +49,15 @@ class SplitFlapDigit extends HTMLElement {
     return isNaN(customSpeed) ? presets['normal'] : customSpeed;
   }
 
+  prefersReducedMotion() {
+    // Check if the user has enabled reduced motion preferences
+    // Returns true if prefers-reduced-motion: reduce is set
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    return false;
+  }
+
   setupAudio() {
     try {
       // Base64 encoded light-switch sound
@@ -131,6 +140,16 @@ class SplitFlapDigit extends HTMLElement {
     const bottomFlap = this.shadowRoot.querySelector('.bottom-flap');
     const newTopFlap = this.shadowRoot.querySelector('.new-top-flap');
     const newBottomFlap = this.shadowRoot.querySelector('.new-bottom-flap');
+
+    // Skip animation when reduced motion is preferred
+    if (this.prefersReducedMotion()) {
+      // Instantly update to the new value without animation
+      topFlap.setAttribute('data-value', newValue);
+      bottomFlap.setAttribute('data-value', newValue);
+      this.isAnimating = false;
+      if (callback) callback();
+      return;
+    }
 
     // Get dynamic timing based on speed attribute
     const speed = this.getSpeed();
@@ -317,6 +336,16 @@ class SplitFlapDigit extends HTMLElement {
           }
           100% {
             transform: rotateX(0deg);
+          }
+        }
+
+        /* Respect user's reduced motion preference - CSS fallback */
+        @media (prefers-reduced-motion: reduce) {
+          .flap,
+          .new-top-flap,
+          .new-bottom-flap {
+            animation: none !important;
+            transition: none !important;
           }
         }
       </style>
