@@ -5,6 +5,7 @@ class SplitFlapDigit extends HTMLElement {
     this.currentValue = '0';
     this.isAnimating = false;
     this.flipSound = null;
+    this.activeRafIds = [];
     this.setupAudio();
     this.render();
   }
@@ -90,16 +91,49 @@ class SplitFlapDigit extends HTMLElement {
 
     const check = (timestamp) => {
       if (timestamp - start >= delay) {
+        // Remove from active IDs before calling callback
+        this.removeRafId(rafId);
         callback();
       } else {
         rafId = requestAnimationFrame(check);
+        // Store the new ID (replaces previous one in check chain)
+        this.storeRafId(rafId);
       }
     };
 
     rafId = requestAnimationFrame(check);
+    // Store initial RAF ID
+    this.storeRafId(rafId);
 
     // Return cancellable ID for cleanup
     return rafId;
+  }
+
+  storeRafId(rafId) {
+    if (!this.activeRafIds.includes(rafId)) {
+      this.activeRafIds.push(rafId);
+    }
+  }
+
+  removeRafId(rafId) {
+    const index = this.activeRafIds.indexOf(rafId);
+    if (index > -1) {
+      this.activeRafIds.splice(index, 1);
+    }
+  }
+
+  cancelAnimations() {
+    // Cancel all pending requestAnimationFrame calls
+    this.activeRafIds.forEach(rafId => {
+      cancelAnimationFrame(rafId);
+    });
+    this.activeRafIds = [];
+    this.isAnimating = false;
+  }
+
+  disconnectedCallback() {
+    // Clean up animations when component is removed from DOM
+    this.cancelAnimations();
   }
 
   setupAudio() {
@@ -144,6 +178,9 @@ class SplitFlapDigit extends HTMLElement {
   }
 
   animateSequential(targetValue) {
+    // Cancel any existing animations before starting new one
+    this.cancelAnimations();
+
     const sequence = this.getSequence(this.currentValue, targetValue);
     let index = 0;
 
