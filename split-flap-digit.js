@@ -338,6 +338,16 @@ class SplitFlapDigit extends HTMLElement {
             transform: rotateX(0deg);
           }
         }
+
+        /* Respect user's reduced motion preference - CSS fallback */
+        @media (prefers-reduced-motion: reduce) {
+          .flap,
+          .new-top-flap,
+          .new-bottom-flap {
+            animation: none !important;
+            transition: none !important;
+          }
+        }
       </style>
       
       <div class="digit-container">
