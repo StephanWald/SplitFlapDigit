@@ -95,7 +95,33 @@
             font-weight: bold;
             margin: 0 10px;
         }
-        
+
+        .clock-status {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #666;
+            margin-left: 15px;
+            transition: background 0.3s;
+        }
+
+        .clock-status.running {
+            background: #4CAF50;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
         .demo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
@@ -141,6 +167,8 @@
                 <span class="separator">:</span>
                 <split-flap-digit id="sec1" value="5" alphabet="0123456789"></split-flap-digit>
                 <split-flap-digit id="sec2" value="6" alphabet="0123456789"></split-flap-digit>
+                <span id="clockStatus" class="clock-status"></span>
+                <span id="clockStatusText" style="margin-left: 10px; font-size: 14px; color: #999;">Stopped</span>
             </div>
             <div class="controls">
                 <button onclick="startClock()">Start Clock</button>
@@ -235,6 +263,8 @@
             stopClock();
             updateClock();
             clockInterval = setInterval(updateClock, 1000);
+            document.getElementById('clockStatus').classList.add('running');
+            document.getElementById('clockStatusText').textContent = 'Running';
         }
         
         function stopClock() {
@@ -242,6 +272,8 @@
                 clearInterval(clockInterval);
                 clockInterval = null;
             }
+            document.getElementById('clockStatus').classList.remove('running');
+            document.getElementById('clockStatusText').textContent = 'Stopped';
         }
         
         function updateClock() {
