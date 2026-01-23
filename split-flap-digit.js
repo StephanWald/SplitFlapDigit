@@ -82,6 +82,26 @@ class SplitFlapDigit extends HTMLElement {
     return Math.max(0, Math.min(1, parsedVolume));
   }
 
+  rafTimeout(callback, delay) {
+    // requestAnimationFrame wrapper for timed delays
+    // Syncs with browser repaint cycle for smoother animations
+    const start = performance.now();
+    let rafId;
+
+    const check = (timestamp) => {
+      if (timestamp - start >= delay) {
+        callback();
+      } else {
+        rafId = requestAnimationFrame(check);
+      }
+    };
+
+    rafId = requestAnimationFrame(check);
+
+    // Return cancellable ID for cleanup
+    return rafId;
+  }
+
   setupAudio() {
     try {
       // Base64 encoded light-switch sound
