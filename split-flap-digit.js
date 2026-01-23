@@ -20,6 +20,9 @@ class SplitFlapDigit extends HTMLElement {
     if (name === 'alphabet' && oldValue !== newValue) {
       // Alphabet changed, no immediate action needed
     }
+    if (name === 'speed' && oldValue !== newValue) {
+      // Speed changed, will be used in next animation cycle
+    }
   }
 
   getAlphabet() {
