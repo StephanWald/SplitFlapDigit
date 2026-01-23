@@ -263,6 +263,8 @@
             stopClock();
             updateClock();
             clockInterval = setInterval(updateClock, 1000);
+            document.getElementById('clockStatus').classList.add('running');
+            document.getElementById('clockStatusText').textContent = 'Running';
         }
         
         function stopClock() {
