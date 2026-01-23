@@ -173,7 +173,11 @@
                     <split-flap-digit id="custom-90" value="0" speed="90"></split-flap-digit>
                 </div>
                 <div class="digit-wrapper">
-                    <div class="digit-label">VERY SLOW (300ms)</div>
+                    <div class="digit-label">VERY SLOW (200ms)</div>
+                    <split-flap-digit id="custom-200" value="0" speed="200"></split-flap-digit>
+                </div>
+                <div class="digit-wrapper">
+                    <div class="digit-label">ULTRA SLOW (300ms)</div>
                     <split-flap-digit id="custom-300" value="0" speed="300"></split-flap-digit>
                 </div>
             </div>
@@ -185,9 +189,10 @@
                 <strong>✓ Manual Verification:</strong>
                 <ul>
                     <li>Click "Test Custom Speeds" and observe different timing</li>
-                    <li>15ms should be extremely fast</li>
-                    <li>90ms should be slightly faster than normal</li>
-                    <li>300ms should be very slow and easy to see each step</li>
+                    <li>15ms should be extremely fast (almost instant)</li>
+                    <li>90ms should be slightly faster than normal (100ms)</li>
+                    <li>200ms should match the 'slow' preset (very slow)</li>
+                    <li>300ms should be ultra slow and each step clearly visible</li>
                 </ul>
             </div>
         </div>
@@ -264,13 +269,13 @@
 
         // Test 2: Custom values
         function testCustom() {
-            ['custom-15', 'custom-90', 'custom-300'].forEach(id => {
+            ['custom-15', 'custom-90', 'custom-200', 'custom-300'].forEach(id => {
                 document.getElementById(id).setAttribute('value', '9');
             });
         }
 
         function resetCustom() {
-            ['custom-15', 'custom-90', 'custom-300'].forEach(id => {
+            ['custom-15', 'custom-90', 'custom-200', 'custom-300'].forEach(id => {
                 document.getElementById(id).setAttribute('value', '0');
             });
         }
